@@ -11,16 +11,21 @@ import numpy as np
 
 class Sentence:
     
+    
     def __init__(self, data):
         self.data      = data
-        self.sentences = self.get_sentences()
+        _, self.sentences = self.get_words_and_sentences()
         self.tags      = self.get_tags()
         self.chars     = self.get_unique_chars()
     
-    def get_sentences(self):
-        agg_func  = lambda s: [w for w in s["Word"].values.tolist()]
-        sentences = self.data.groupby('Sentence #').apply(agg_func)
-        return sentences
+
+    def get_words_and_sentences(self):
+
+      return (
+        self.data['Word'].values,
+        self.data.groupby('Sentence #').apply(lambda s: [w for w in s["Word"].values.tolist()])
+        )
+
 
     def get_sentence_info(self):
 
@@ -37,7 +42,8 @@ class Sentence:
          np.mean(sentence_lengths),    # mean sentence length
          np.std(sentence_lengths)      # standard deviatio of sentence length
         )
-                  
+        
+
     def get_word_info(self): 
       word_lengths = [len(w) for s in self.sentences for w in s] #word length
       
@@ -47,9 +53,11 @@ class Sentence:
          np.mean(word_lengths), #mean word length
          np.std(word_lengths) #standard deviatio of word length
       )         
-        
+       
+
     def get_tags(self): return list(set(self.data.Tag.values))
     
+
     def get_unique_chars(self): return list(set([char for w in self.data["Word"].values.tolist() for char in w]))
     
         
