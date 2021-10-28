@@ -9,7 +9,7 @@ def get_char_feature(char):
         char.isupper(),                 #Char is Upper Case
         char in string.punctuation,     #Char is Punctuation
         char.isnumeric(),               #Char is Numeric
-        not( char.islower() or char.isupper() or char in string.punctuation or char.isnumeric())   #Char is None of the Above
+        not(char.islower() or char.isupper() or char in string.punctuation or char.isnumeric())   #Char is None of the Above
     ], dtype=np.int32)
 
 def main(add_char_features=False):
@@ -17,7 +17,7 @@ def main(add_char_features=False):
     np.random.seed(10)      #to reproduce results
 
     embedding_dim   = 30
-    limit           = np.sqrt(3 / embedding_dim)    #According to 4 - NERresearch paper
+    limit           = np.sqrt(3 / embedding_dim)    #According to 4 - NER research paper
 
     with open('unique_chars.pkl', 'rb') as f:
         chars = pickle.load(f)
@@ -32,15 +32,12 @@ def main(add_char_features=False):
     with open(file_name, 'wb') as f:
         pickle.dump(char_embeddings, f) 
 
-    print(char_embeddings)
 
 if __name__ == '__main__':
 
-    try:                sys.argv[1]; add_char_features = True        
-    except IndexError:  add_char_features = False
+    try:                sys.argv[1]; add_char_features = True if sys.argv[1] == 'true' else False   
+    except IndexError:               add_char_features = False
 
-
-    print(add_char_features)
     main(add_char_features=add_char_features)
 
 
