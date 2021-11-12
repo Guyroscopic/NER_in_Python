@@ -4,6 +4,10 @@ import sys
 import numpy as np
 
 def get_char_feature(char):
+    """
+    Takes in a character and returns a numpy array of pre-defined char features
+    """
+
     return np.array([
         char.islower(),                 #Char is Lower Case
         char.isupper(),                 #Char is Upper Case
@@ -11,6 +15,20 @@ def get_char_feature(char):
         char.isnumeric(),               #Char is Numeric
         not(char.islower() or char.isupper() or char in string.punctuation or char.isnumeric())   #Char is None of the Above
     ], dtype=np.int32)
+
+def write_to_txt_file(dict, file_name):
+    """
+    Takes in a dictionary of embeddings and writes them to a .txt file with the same format as GloVe Embeddings
+    """
+    string = ""
+    for char, embedding in dict.items():
+        temp = " "
+        temp += char + " " + temp.join(embedding.astype(np.str)) + '\n'        
+        string += temp
+
+    with open(file_name, 'w', encoding='latin') as f:
+        f.write(string[:-1])
+
 
 def main(add_char_features=False):
 
@@ -27,10 +45,12 @@ def main(add_char_features=False):
         embedding           = np.random.uniform(-limit, limit, embedding_dim)
         char_embeddings[c]  = np.concatenate((embedding, get_char_feature(c))) if add_char_features else embedding        
 
-    file_name = 'char_embeddings_with_features.pkl' if add_char_features else 'char_embeddings.pkl'
- 
-    with open(file_name, 'wb') as f:
-        pickle.dump(char_embeddings, f) 
+    file_name = 'char_embeddings_with_features.txt' if add_char_features else 'char_embeddings.txt'
+    
+    # with open(file_name, 'wb') as f:
+    #     pickle.dump(char_embeddings, f) 
+
+    write_to_txt_file(char_embeddings, 'char embeddings/'+file_name)
 
 
 if __name__ == '__main__':
