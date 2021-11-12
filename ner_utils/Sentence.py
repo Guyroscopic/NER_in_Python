@@ -5,9 +5,9 @@
 
 
 import numpy as np
+import pandas as pd
 
-
-# In[2]:
+# In[2]: 
 
 class Sentence:
     
@@ -55,9 +55,12 @@ class Sentence:
       )         
        
 
-    def get_tags(self): return list(set(self.data.Tag.values))
-    
+    def get_tags(self):
 
+      one_hot = pd.concat([self.data, pd.get_dummies(self.data['Tag'])], axis=1)
+      return one_hot.groupby('Sentence #').apply(lambda s : s[[col for col in s.columns[4:]]].values.tolist())
+
+    
     def get_unique_chars(self): return list(set([char for w in self.data["Word"].values.tolist() for char in w]))
     
         

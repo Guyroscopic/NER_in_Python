@@ -20,8 +20,8 @@ class Data:
 
     def get_tokens(self, words, sentences):
 
-    	char_to_idx = self._tokenize_data(words, lower=False, char_level=True).word_index
-    	word_to_idx = self._tokenize_data(sentences, lower=True).word_index
+    	char_to_idx  = self._tokenize_data(words, lower=False, char_level=True).word_index
+    	word_to_idx  = self._tokenize_data(sentences, lower=True).word_index
 
     	return (
 				char_to_idx,
@@ -32,7 +32,7 @@ class Data:
 
     def get_tokenized_sequences(self, words, sentences, max_word_len, max_sentence_len):
 
-    	char_to_idx, word_to_idx, idx_to_char, idx_to_word = self._get_tokens(words, sentences)
+    	char_to_idx, word_to_idx, idx_to_char, idx_to_word = self.get_tokens(words, sentences)
 
     	sentence_sequences = [[word_to_idx[w.lower()] for w in s] for s in sentences]
     	sentence_sequences = pad_sequences(sequences=sentence_sequences, maxlen=max_sentence_len, value=0, padding='post', truncating='post')
@@ -42,6 +42,8 @@ class Data:
     	return word_sequences, sentence_sequences
     
 
+    def get_labels(self):
+    	pass
     # def display_data(self, n):
     #     return self.dataset.head(n)
       
