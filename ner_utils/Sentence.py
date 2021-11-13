@@ -15,7 +15,7 @@ class Sentence:
     def __init__(self, data):
         self.data      = data
         _, self.sentences = self.get_words_and_sentences()
-        self.tags      = self.get_tags()
+        self.tags      = self.get_unique_tags()
         self.chars     = self.get_unique_chars()
     
 
@@ -55,13 +55,15 @@ class Sentence:
       )         
        
 
-    def get_tags(self):
+    def get_labels(self):
 
       one_hot = pd.concat([self.data, pd.get_dummies(self.data['Tag'])], axis=1)
       return one_hot.groupby('Sentence #').apply(lambda s : s[[col for col in s.columns[4:]]].values.tolist())
 
     
     def get_unique_chars(self): return list(set([char for w in self.data["Word"].values.tolist() for char in w]))
+
+    def get_unique_tags(self) : return list(set([char for w in self.data["Tag"].values.tolist() for char in w]))
     
         
         
