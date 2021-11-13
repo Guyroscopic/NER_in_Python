@@ -18,7 +18,7 @@ class Data:
 
         return t
 
-    def _get_tokens(self, words, sentences):
+    def get_tokens(self, words, sentences):
 
     	char_to_idx = self._tokenize_data(words, lower=False, char_level=True).word_index
     	word_to_idx = self._tokenize_data(sentences, lower=True).word_index
@@ -30,14 +30,14 @@ class Data:
     		   	{ idx : word for word, idx in word_to_idx.items()}
     		)
 
-    def get_tokenized_sequences(self, words, sentences):
+    def get_tokenized_sequences(self, words, sentences, max_word_len, max_sentence_len):
 
-    	char_to_idx, word_to_idx, idx_to_char, idx_to_word = self._get_tokens(words, sentences)
+    	char_to_idx, word_to_idx, idx_to_char, idx_to_word = self.get_tokens(words, sentences)
 
     	sentence_sequences = [[word_to_idx[w.lower()] for w in s] for s in sentences]
-    	sentence_sequences = pad_sequences(sequences=sentence_sequences, value=0, padding='post', truncating='post')
+    	sentence_sequences = pad_sequences(sequences=sentence_sequences, maxlen=max_sentence_len, value=0, padding='post', truncating='post')
 
-    	word_sequences     =  [pad_sequences([[char_to_idx[c] for c in w] for w in s], value=0, padding='post', truncating='post') for s in sentences]
+    	word_sequences     =  [pad_sequences([[char_to_idx[c] for c in w] for w in s], maxlen=max_word_len, value=0, padding='post', truncating='post') for s in sentences]
 
     	return word_sequences, sentence_sequences
     
