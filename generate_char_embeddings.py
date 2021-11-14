@@ -24,7 +24,7 @@ def write_to_txt_file(dict, file_name):
     for char, embedding in dict.items():
         temp = " "
         temp += char + " " + temp.join(embedding.astype(np.str)) + '\n'        
-        string += temp
+        string += temp[1:]
 
     with open(file_name, 'w', encoding='latin') as f:
         f.write(string[:-1])
