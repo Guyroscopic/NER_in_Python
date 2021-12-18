@@ -37,8 +37,10 @@ def main(add_char_features=False):
     embedding_dim   = 30
     limit           = np.sqrt(3 / embedding_dim)    #According to 4 - NER research paper
 
+    #####-----CHANGE THIS---------#####
     with open('unique_chars.pkl', 'rb') as f:
         chars = pickle.load(f)
+    #####-----CHANGE THIS---------#####
 
     char_embeddings = dict()
     for c in chars:
