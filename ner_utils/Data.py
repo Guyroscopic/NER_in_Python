@@ -42,6 +42,12 @@ class Data:
     	return word_sequences, sentence_sequences
     
 
+    def clean_data(self, text_data, text_to_remove): return [text_data.remove(text) for text in text_to_remove]
+        
+
+        # Method to remove unwanted characters from data
+
+
     # def display_data(self, n):
     #     return self.dataset.head(n)
       

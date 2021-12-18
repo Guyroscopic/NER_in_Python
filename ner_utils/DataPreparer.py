@@ -16,20 +16,22 @@ class DataPreparer:
 
     ###-----START PUBLIC METHODS-----###
 
-    def get_tokenized_sentences(self, max_word_len):
+    def get_tokenized_sentences(self, max_sentence_len):
         """
         Public method for ...
 
         @return
         """
 
+        pad_value = 0
+
         word_to_idx          = self._get_word_tokens()
-        word_to_idx['<PAD>'] = 0
+        word_to_idx['<PAD>'] = pad_value
 
         temp_dataset               = self.dataset.copy()
-        temp_dataset['word_token'] = temp_dataset.apply(lambda row: word_to_idx[row['Word'].lower()], axis=1)
+        temp_dataset['word_token'] = temp_dataset['Word'].str.lower().map(word_to_idx)           
         tokenized_sentences        = temp_dataset.groupby(['Sentence #'])['word_token'].apply(np.array)
-        padded_tokenized_sentences = pad_sequences(tokenized_sentences, maxlen=max_word_len, value=0, padding='post', truncating='post') 
+        padded_tokenized_sentences = pad_sequences(tokenized_sentences, maxlen=max_sentence_len, value=pad_value, padding='post', truncating='post') 
 
         return padded_tokenized_sentences, word_to_idx
 
@@ -40,8 +42,15 @@ class DataPreparer:
 
         @return
         """
-        pass
-        
+
+        pad_value = 0
+
+        char_to_idx          = self._get_char_tokens()
+        char_to_idx['<PAD>'] = pad_value
+
+        temp_dataset         = self.dataset.copy()
+        temp_dataset['char_tokens'] = temp_dataset.apply(lambda row: row['Word'].split(), axis=1)
+       
     ###-----END PUBLIC METHODS-----###
 
 

@@ -21,6 +21,9 @@ class Sentence:
 
     def get_words_and_sentences(self):
 
+      # removing unwanted char from text
+      self.data['Word'] = self.data['Word'].apply(lambda s: s.replace('\xa0', ''))
+      
       return (
         self.data['Word'].values,
         self.data.groupby('Sentence #').apply(lambda s: [w for w in s["Word"].values.tolist()])
@@ -63,10 +66,10 @@ class Sentence:
     
     def get_unique_chars(self): return list(set([char for w in self.data["Word"].values.tolist() for char in w]))
 
-    def get_unique_tags(self) : return list(set([char for w in self.data["Tag"].values.tolist() for char in w]))
+    def get_unique_tags(self) : return list(set([tag for tag in self.data["Tag"].values.tolist()]))
     
-        
-        
+
+
 
 
 # In[ ]:
